@@ -4,6 +4,7 @@
 
   <meta charset='UTF-8'/>
   <link rel='sitemap' type='application/xml' href='/sitemap.xml'/>
+  <script src='https://code.jquery.com/jquery-3.7.1.min.js'></script>
   <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
   <link href='https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto:wght@400;500&display=swap' rel='stylesheet'/>
   <link rel='icon' type='image/png' href='https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj8pl9pVfHkJd3Vv_rWkdDJBALWMPRVAM-Lxtmt6opK1DX497d5IPzHYXB2lx_fq8yEsxmkWBy_2XODAZlP-Rj-oDHtoJxCF-5fFwXRLJkLkK6t5of1dY5wbuE3Js7mwX2JYynHuhJnrLw/s1600/detv.png'/>
@@ -2415,9 +2416,10 @@ window.openPost = function(url){
   $pv.show();
   $pvi.html('<div class="pv-loading">&#9203; Cargando...</div>');
   window.scrollTo(0,0);
+  window.location.href = url; return;
   var path = url.replace(/^https?:\/\/[^\/]+/,'');
   $.ajax({
-    url: '/feeds/posts/default?alt=json&max-results=1&path='+encodeURIComponent(path),
+    url: '/posts.json',
     dataType: 'json',
     success: function(data){
       var entries = data.feed && data.feed.entry ? data.feed.entry : [];
@@ -2501,9 +2503,7 @@ function bloggerThumb(entry, tempDiv) {
 
 function loadBloggerNews() {
   var labelMatch = window.location.pathname.match(/\/search\/label\/(.+)/);
-  var feedUrl = labelMatch
-    ? '/feeds/posts/default/-/' + labelMatch[1] + '?alt=json&max-results=20'
-    : '/feeds/posts/default?alt=json&max-results=20';
+  var feedUrl = '/posts.json';
   if (labelMatch) {
     var labelName = decodeURIComponent(labelMatch[1].replace(/\+/g, ' '));
     var rowHdr = document.querySelector('#news-section .row-hdr h3');
